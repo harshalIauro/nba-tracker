@@ -1,7 +1,7 @@
 <div class="flex column card" *ngIf="teamDetails">
   <div class="flex row space-between">
     <p class="header m-btm-10 m-top-0">{{teamDetails.name}} [{{teamDetails.abbreviation}}]</p>
-    <span class="pointer" (click)="deleteCard()">X</span>
+    <span [id]="'remove'+teamDetails.abbreviation" class="pointer" (click)="deleteCard()">X</span>
   </div>
   <p class="m-btm-10">{{teamDetails.conference | conference}}</p>
   <span class="divider"></span>
@@ -17,7 +17,8 @@
         <p>Avg pts scored <b>{{teamDetails.avgPtsScore}}</b></p>
         <p>Avg pts conceded <b>{{teamDetails.avgPtsConceded}}</b></p>
       </div>
-      <button class="bg-green pointer" (click)="seeResult()">See Game Result</button>
+      <button [id]="'results'+teamDetails.abbreviation" class="bg-green pointer" (click)="seeResult()">See Game
+        Result</button>
     </div>
     <img class="logo" [src]="logo" alt={{teamDetails.abbreviation}}>
   </div>

@@ -89,9 +89,9 @@ export class DashboardComponent implements OnInit {
   getLastTwelveDates(): string {
     const today: Date = new Date();
     const dates: string[] = [];
-    for (let index: number = 0; index < 12; index++) {
+    for (let index: number = 1; index <= 12; index++) {
       const date: Date = new Date(today);
-      date.setDate(today.getDate() - index - 1);
+      date.setDate(today.getDate() - index);
       dates.push(date.toISOString().slice(0, 10))
     }
     return dates.join('&dates[]=');
