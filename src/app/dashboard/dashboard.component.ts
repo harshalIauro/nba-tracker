@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.getTeams();
     const selectedTeams = this.apiService.getStorage('selectedTeams');
-    if (selectedTeams.length) {
+    if (selectedTeams && selectedTeams.length) {
       this.selectedTeams = selectedTeams;
     }
   }
