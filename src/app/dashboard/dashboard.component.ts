@@ -2,7 +2,6 @@ import { Game, GameDetails, Score } from '../utils/interfaces';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
-import { GlobalUrl } from '../utils/global-urls';
 import { Team, TeamDetails, TeamList } from '../utils/interfaces';
 
 @Component({
@@ -23,7 +22,7 @@ export class DashboardComponent implements OnInit {
    */
   ngOnInit() {
     this.getTeams();
-    const selectedTeams = this.apiService.getStorage('selectedTeams');
+    const selectedTeams: TeamDetails[] = this.apiService.getStorage('selectedTeams');
     if (selectedTeams && selectedTeams.length) {
       this.selectedTeams = selectedTeams;
     }
@@ -33,7 +32,7 @@ export class DashboardComponent implements OnInit {
    * @description Get all teams list.Set first team selected by deafult.
    */
   getTeams(): void {
-    this.apiService.callGetApi(GlobalUrl.getAllTeams).subscribe((response: TeamList) => {
+    this.apiService.getAllTeams().subscribe((response: TeamList) => {
       if (response.data && response.data.length) {
         this.options = response.data;
         this.selectedOption = this.options[0].id;
@@ -68,7 +67,7 @@ export class DashboardComponent implements OnInit {
    * @description Remove the team from selected team array when click on cross button in card component.
    */
   removeTeam(id: number): void {
-    const index = this.getTeamIndex(this.selectedTeams, id);
+    const index: number = this.getTeamIndex(this.selectedTeams, id);
     if (index !== -1) {
       this.selectedTeams.splice(index, 1)
     }
@@ -88,12 +87,13 @@ export class DashboardComponent implements OnInit {
    * @description Get last 12 days dates to get the details results of the team.
    */
   getLastTwelveDates(): string {
-    const today = new Date();
-    const dates = Array.from({ length: 12 }, (_, i) => {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i - 1);
-      return date.toISOString().substring(0, 10);
-    });
+    const today: Date = new Date();
+    const dates: string[] = [];
+    for (let index: number = 0; index < 12; index++) {
+      const date: Date = new Date(today);
+      date.setDate(today.getDate() - index - 1);
+      dates.push(date.toISOString().slice(0, 10))
+    }
     return dates.join('&dates[]=');
   }
 
@@ -114,9 +114,9 @@ export class DashboardComponent implements OnInit {
     const team: Team | undefined = this.getTeamDetail(+teamId);
     if (team && this.checkTeamExist(team.abbreviation) === -1) {
       this.isLoading = true;
-      const dates = this.getLastTwelveDates();
-      const params = `dates[]=${dates}&per_page=12&team_ids[]=${teamId}`;
-      this.apiService.callGetApi(GlobalUrl.getGameDetails.replace('{params}', params)).subscribe((response: GameDetails) => {
+      const dates: string = this.getLastTwelveDates();
+      const params: string = `dates[]=${dates}&per_page=12&team_ids[]=${teamId}`;
+      this.apiService.getGameDetails(params).subscribe((response: GameDetails) => {
         this.isLoading = false;
         this.setTeamResponse(response.data, team)
       }, (error: Error) => {
@@ -138,9 +138,9 @@ export class DashboardComponent implements OnInit {
    */
   setTeamResponse(data: Game[], team: Team): void {
     const teamDetails: TeamDetails = { id: team.id, name: team.name, abbreviation: team.abbreviation, conference: team.conference, results: [], avgPtsScore: 0, avgPtsConceded: 0, scores: [] };
-    let teamScore = 0;
-    let opponentTeamScore = 0;
-    const totalRecord = data.length;
+    let teamScore: number = 0;
+    let opponentTeamScore: number = 0;
+    const totalRecord: number = data.length;
     for (const teams of data) {
       if (teams.home_team.abbreviation === team.abbreviation) {
         teamScore += teams.home_team_score;

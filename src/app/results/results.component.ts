@@ -10,8 +10,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  teamDetails: TeamDetails | undefined;
 
+  teamDetails: TeamDetails | undefined;
   constructor(private location: Location, private apiService: ApiService, private router: ActivatedRoute) { }
 
   /**
@@ -19,10 +19,10 @@ export class ResultsComponent implements OnInit {
    * fetch the team details and scores using teamcode.
    */
   ngOnInit(): void {
-    const selectedTeams = this.apiService.getStorage('selectedTeams');
-    const teamCode = this.router.snapshot.paramMap.get('teamCode');
+    const selectedTeams: TeamDetails[] = this.apiService.getStorage('selectedTeams');
+    const teamCode: string | null = this.router.snapshot.paramMap.get('teamCode');
     if (teamCode && selectedTeams && selectedTeams.length) {
-      const index = selectedTeams.findIndex((team: TeamDetails) => team.id === +teamCode);
+      const index: number = selectedTeams.findIndex((team: TeamDetails) => team.id === +teamCode);
       if (index !== -1) {
         this.teamDetails = selectedTeams[index]
       }
