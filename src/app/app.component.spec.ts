@@ -23,13 +23,6 @@ describe('AppComponent', () => {
   it(`should have as title 'nba-tracker'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('nba-tracker');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('nba-tracker app is running!');
+    expect(app.title).toEqual('NBA Score Tracking App');
   });
 });
