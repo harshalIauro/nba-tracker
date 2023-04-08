@@ -22,7 +22,7 @@ export class ResultsComponent implements OnInit {
     const selectedTeams = this.apiService.getStorage('selectedTeams');
     const teamCode = this.router.snapshot.paramMap.get('teamCode');
     if (teamCode && selectedTeams && selectedTeams.length) {
-      const index = selectedTeams.findIndex((team: any) => team.id === +teamCode);
+      const index = selectedTeams.findIndex((team: TeamDetails) => team.id === +teamCode);
       if (index !== -1) {
         this.teamDetails = selectedTeams[index]
       }
